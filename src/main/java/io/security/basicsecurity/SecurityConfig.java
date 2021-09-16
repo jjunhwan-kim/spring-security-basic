@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         formLogin(http);
         formLogout(http);
         rememberMe(http);
+        sessionManagement(http);
     }
 
     private void formLogin(HttpSecurity http) throws Exception {
@@ -91,5 +93,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenValiditySeconds(3600)      // Default는 14일
                 .alwaysRemember(false)           // true일 경우 리멤버 미 기능이 활성화되지 않아도 항상 실행
                 .userDetailsService(userDetailsService);
+    }
+
+    private void sessionManagement(HttpSecurity http) throws Exception {
+        http    // 동시 세션 제어
+                .sessionManagement()
+                .maximumSessions(1)              // 최대 허용 가능 세션 수 (-1: 무제한 로그인 세션 허용)
+                .maxSessionsPreventsLogin(false) // 동시 로그인 차단함(false: 기존 세션 만료(default))
+                .expiredUrl("/expired");
+
+        http    // 세션 고정 보호
+                .sessionManagement()
+                .sessionFixation()
+                .changeSessionId(); // 기본 값(none, changeSessionId, newSession, migrateSession)
+
+        http    // 세션 정책
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED); // 기본 값
+
+        // SessionCreationPolicy.ALWAYS: 스프링 시큐리티가 항상 세션 생성
+        // SessionCreationPolicy.NEVER: 스프링 시큐리티가 생성하지 않지만 이미 존재하면 사용
+        // SessionCreationPolicy.IF_REQUIRED: 스프링 시큐리티가 필요 시 생성(기본값)
+        // SessionCreationPolicy.STATELESS: 스프링 시큐리티가 생성하지 않고 존재해도 사용하지 않음
     }
 }
