@@ -49,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         rememberMe(http);
         sessionManagement(http);
         exceptionHandling(http);
+        csrf(http);
     }
 
     private void exceptionHandling(HttpSecurity http) throws Exception {
@@ -168,5 +169,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // SessionCreationPolicy.NEVER: 스프링 시큐리티가 생성하지 않지만 이미 존재하면 사용
         // SessionCreationPolicy.IF_REQUIRED: 스프링 시큐리티가 필요 시 생성(기본값)
         // SessionCreationPolicy.STATELESS: 스프링 시큐리티가 생성하지 않고 존재해도 사용하지 않음
+    }
+
+    private void csrf(HttpSecurity http) throws Exception {
+        http
+                .csrf();
     }
 }
