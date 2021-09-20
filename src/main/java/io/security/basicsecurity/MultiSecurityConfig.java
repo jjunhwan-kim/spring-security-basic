@@ -6,9 +6,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-@Configuration
-@EnableWebSecurity
-@Order(0) // 구체적인 범위 URL의 우선순위가 높아야 함
+//@Configuration
+//@EnableWebSecurity
+//@Order(0) // 구체적인 범위 URL의 우선순위가 높아야 함
 public class MultiSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
@@ -22,8 +22,8 @@ public class MultiSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 }
 
-@Configuration
-@Order(1)
+//@Configuration
+//@Order(1)
 class MultiSecurityConfig2 extends WebSecurityConfigurerAdapter {
 
     @Override
